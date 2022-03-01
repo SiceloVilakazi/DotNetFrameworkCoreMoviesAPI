@@ -37,7 +37,7 @@ public class ActorService
 
         var actors= await (from actor in  context.actors  join actorMovie in context.movieActors
                    on actor.Id equals actorMovie.ActorId join movie in context.movies
-                   on actorMovie.MovieId equals movie.Id where movie.Title.ToLower()==search
+                   on actorMovie.MovieId equals movie.Id where movie.Title.ToLower().Contains(search) 
                    select actor).ToListAsync();
         return actors;
     }

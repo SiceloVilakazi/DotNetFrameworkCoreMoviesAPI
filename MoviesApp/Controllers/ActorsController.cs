@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace MoviesApp.Controllers
 {
@@ -7,59 +8,68 @@ namespace MoviesApp.Controllers
     [ApiController]
     public class ActorsController : ControllerBase
     {
-        private readonly ActorService _actorService;
+        private readonly IMediator _medator;
 
-        public ActorsController(ActorService actorService)
+        public ActorsController(IMediator mediator)
         {
-            _actorService = actorService;
+            _medator = mediator;
         }
 
         [HttpGet("Get")]
         public async Task<ActionResult<List<Actor>>> Get()
         {
-            return Ok(await _actorService.GetAllAsync());
+            var query = new GetActorListQuery();
+            var result = await _medator.Send(query);
+            return Ok(result);
         }
 
         [HttpGet("{Id}")]
         public async Task<ActionResult<Actor>> Get(int Id)
         {
-            var actor = await _actorService.GetByIdAsync(Id);
-            if (actor == null)
-                return BadRequest("Actor Does not exist");
-            return Ok(actor);
+            var query = new GetActorByIdQuery(Id);
+            var result = await _medator.Send(query);
+            return result != null ? Ok(result) : NotFound();
         }
         [HttpGet("GetActorsByMovie/{MovieName}")]
-        public async Task<ActionResult<List<Actor>>> GetActorsByMovie(string MovieName)
+        public async Task<ActionResult<List<string>>> GetActorsByMovie(string MovieName)
         {
-            var actors = await _actorService.GetActorsByMovie(MovieName);
-            return Ok(actors);
+            var query = new GetActorNamesByMovieQuery(MovieName);
+            var result = await _medator.Send(query);
+            return result != null ? Ok(result) : NotFound();
         }
 
         [HttpPost("Add")]
         public async Task<ActionResult> Add(Actor model)
         {
+            var result = 0;
             if (ModelState.IsValid)
-                await _actorService.AddAsync(model);
-            return Ok("Actor Saved");
+            {
+                var command = new AddActorCommand(model);
+                result = await _medator.Send(command);
+            }
+            return StatusCode((int)HttpStatusCode.Created, result);
         }
 
         [HttpPut("Edit")]
         public async Task<ActionResult> Edit(Actor model)
         {
+            var result = 0;
             if (ModelState.IsValid)
             {
-                await _actorService.EditAsync(model);
+                var command = new EditActorCommand(model);
+                result = await _medator.Send(command);
             }
 
-            return Ok("Actor edited");
+            return StatusCode((int)HttpStatusCode.OK, result);
         }
 
         [HttpDelete("{Id}")]
         public async Task<ActionResult> Delete(int Id)
         {
-            await _actorService.RemoveAsync(Id);
+            var command = new DeleteMovieCommand(Id);
+            var result = await _medator.Send(command);
 
-            return Ok("Actor " + Id + ", deleted");
+            return Ok("Movie " + result + ", deleted");
         }
     }
 }
