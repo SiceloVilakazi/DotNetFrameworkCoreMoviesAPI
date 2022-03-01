@@ -38,6 +38,14 @@ namespace MoviesApp.Controllers
             return result != null ? Ok(result) : NotFound();
         }
 
+        [HttpGet("GetTotalActorsByAgent/{AgentName}")]
+        public async Task<ActionResult<int>> GetTotalActorsByAgent(string AgentName)
+        {
+            var query = new GetTotalActorsByAgentQuery(AgentName);
+            var result = await _medator.Send(query);
+            return  Ok(result);
+        }
+
         [HttpPost("Add")]
         public async Task<ActionResult> Add(Actor model)
         {

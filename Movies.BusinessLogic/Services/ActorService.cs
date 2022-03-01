@@ -1,6 +1,5 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using System.Transactions;
 
 namespace Movies.BusinessLogic;
 
@@ -9,8 +8,8 @@ public class ActorService
     private readonly DataContext context;
     private readonly MovieActorService _movieActorService;
     private readonly ActorAgentService _actorAgentService;
-    public ActorService(DataContext dataContext,MovieService movieService,
-           MovieActorService movieActorService,ActorAgentService actorAgentService)
+    public ActorService(DataContext dataContext, MovieService movieService,
+           MovieActorService movieActorService, ActorAgentService actorAgentService)
     {
         context = dataContext;
         _movieActorService = movieActorService;
@@ -33,13 +32,27 @@ public class ActorService
 
     public async Task<List<Actor>> GetActorsByMovie(string MovieName)
     {
-        var search=MovieName.ToLower();
+        var search = MovieName.ToLower();
 
-        var actors= await (from actor in  context.actors  join actorMovie in context.movieActors
-                   on actor.Id equals actorMovie.ActorId join movie in context.movies
-                   on actorMovie.MovieId equals movie.Id where movie.Title.ToLower().Contains(search) 
-                   select actor).ToListAsync();
+        var actors = await (from actor in context.actors
+                            join actorMovie in context.movieActors on actor.Id equals actorMovie.ActorId
+                            join movie in context.movies on actorMovie.MovieId equals movie.Id
+                            where movie.Title.ToLower().Contains(search)
+                            select actor).ToListAsync();
         return actors;
+    }
+
+    public async Task<int> GetTotalActorsByAgent(string AgentName)
+    {
+        var search = AgentName.ToLower();
+
+        var actors = await (from actor in context.actors
+                            join actorAgent in context.actorAgents on actor.Id equals actorAgent.ActorId
+                            join agent in context.agents on actorAgent.AgentId equals agent.Id
+                            where agent.Name.ToLower().Contains(search) ||
+                            agent.CompanyName.ToLower().Contains(search)
+                            select actor).ToListAsync();
+        return actors.Count;
     }
 
     #endregion
@@ -62,13 +75,13 @@ public class ActorService
     {
         try
         {
-             _movieActorService.RemoveByActorId(Id);
-             _actorAgentService.RemoveByActorId(Id);
+            _movieActorService.RemoveByActorId(Id);
+            _actorAgentService.RemoveByActorId(Id);
             var actor = await context.actors.FirstOrDefaultAsync(x => x.Id == Id);
             if (actor != null)
                 context.Remove(actor);
             await context.SaveChangesAsync();
-          return Id;
+            return Id;
         }
         catch { throw new InvalidOperationException("cannot delete actor"); }
 

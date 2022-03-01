@@ -26,6 +26,7 @@ builder.Services.AddMediatR(typeof(EditActorHandler).Assembly);
 builder.Services.AddMediatR(typeof(AddActorHandler).Assembly);
 builder.Services.AddMediatR(typeof(GetActorByIdHandler).Assembly);
 builder.Services.AddMediatR(typeof(GetActorNamesByMovieHandler).Assembly);
+builder.Services.AddMediatR(typeof(GetTotalActorsByAgentHandler).Assembly);
 #endregion
 
 #region Agent Handlers
