@@ -31,17 +31,18 @@ public class AgentService
     #endregion
 
     #region Write Methods
-    public async Task AddAsync(Agent agent)
+    public async Task<int> AddAsync(Agent agent)
     {
         try
         {
             context.Add(agent);
             await context.SaveChangesAsync();
+            return agent.Id;
         }
         catch { throw new InvalidOperationException("cannot add agent"); }
      
     }
-    public async Task RemoveAsync(int Id)
+    public async Task<int> RemoveAsync(int Id)
     {
         try
         {
@@ -50,15 +51,17 @@ public class AgentService
             if (agent != null)
                 context.Remove(agent);
             await context.SaveChangesAsync();
+            return Id;
         }
         catch { throw new InvalidOperationException("cannot remove agent"); }
 
     }
 
-    public async Task EditAsync(Agent agent)
+    public async Task<int> EditAsync(Agent agent)
     {
         context.Update(agent);
         await context.SaveChangesAsync();
+        return agent.Id;
     }
 
     #endregion

@@ -29,18 +29,20 @@ public class MovieActorService
     #endregion
 
     #region Write Methods
-    public async Task AddAsync(MovieActor movieActor)
+    public async Task<int> AddAsync(MovieActor movieActor)
     {
         //Validate(movie);
         context.Add(movieActor);
         await context.SaveChangesAsync();
+        return movieActor.Id;
     }
-    public async Task RemoveAsync(int Id)
+    public async Task<int> RemoveAsync(int Id)
     {
         var movieActor = await context.movieActors.FirstOrDefaultAsync(x => x.Id == Id);
         if (movieActor != null)
             context.Remove(movieActor);
         await context.SaveChangesAsync();
+        return Id;
     }
 
     public void RemoveByMovieId(int Id)
@@ -60,10 +62,11 @@ public class MovieActorService
         
     }
 
-    public async Task EditAsync(MovieActor movieActor)
+    public async Task<int> EditAsync(MovieActor movieActor)
     {
         context.Update(movieActor);
         await context.SaveChangesAsync();
+        return movieActor.Id;
     }
     #endregion
 }

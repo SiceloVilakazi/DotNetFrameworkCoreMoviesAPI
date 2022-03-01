@@ -37,13 +37,14 @@ public class MovieService
     #endregion
 
     #region Write Methods
-    public async Task AddAsync(Movie movie)
+    public async Task<int> AddAsync(Movie movie)
     {
         Validate(movie);
         try
         {
             context.Add(movie);
             await context.SaveChangesAsync();
+            return movie.Id;
         }
         catch
         {
@@ -51,29 +52,29 @@ public class MovieService
         }
    
     }
-    public async Task RemoveAsync(int Id)
+    public async Task<int> RemoveAsync(int Id)
     {
-        using var scope = new TransactionScope(TransactionScopeOption.Required);
         try
         {
             var movie = await context.movies.FirstOrDefaultAsync(x => x.Id == Id);
             if (movie != null)
                 context.Remove(movie);
             await context.SaveChangesAsync();
+            return Id;
         }
         catch
         {
             throw new InvalidOperationException("cannot remove the movie");
         }
-        scope.Complete();
     }
 
-    public async Task EditAsync(Movie movie)
+    public async Task<int> EditAsync(Movie movie)
     {
         try
         {
             context.Update(movie);
             await context.SaveChangesAsync();
+            return movie.Id;
         }
         catch
         {

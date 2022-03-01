@@ -29,19 +29,20 @@ public class ActorAgentService
     #endregion
 
     #region Add Methods
-    public async Task AddAsync(ActorAgent actorAgent)
+    public async Task<int> AddAsync(ActorAgent actorAgent)
     {
         try
         {
             context.Add(actorAgent);
             await context.SaveChangesAsync();
+            return actorAgent.Id;
         }
         catch
         {
             throw new InvalidOperationException("cannot add Actor Agent");
         }
     }
-    public async Task RemoveAsync(int Id)
+    public async Task<int> RemoveAsync(int Id)
     {
 
         try
@@ -50,6 +51,7 @@ public class ActorAgentService
             if (actorAgents != null)
                 context.Remove(actorAgents);
             await context.SaveChangesAsync();
+            return Id;
         }
         catch
         {
@@ -75,12 +77,13 @@ public class ActorAgentService
 
     }
 
-    public async Task EditAsync(ActorAgent actorAgent)
+    public async Task<int> EditAsync(ActorAgent actorAgent)
     {
         try
         {
             context.Update(actorAgent);
             await context.SaveChangesAsync();
+            return actorAgent.Id;
         }
         catch
         {

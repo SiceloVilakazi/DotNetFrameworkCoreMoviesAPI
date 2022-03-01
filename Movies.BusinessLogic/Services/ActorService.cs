@@ -45,19 +45,20 @@ public class ActorService
     #endregion
 
     #region Write methods
-    public async Task AddAsync(Actor actor)
+    public async Task<int> AddAsync(Actor actor)
     {
         try
         {
             context.Add(actor);
             await context.SaveChangesAsync();
+            return actor.Id;
         }
         catch
         {
             throw new InvalidOperationException("cannot add actor");
         }
     }
-    public async Task RemoveAsync(int Id)
+    public async Task<int> RemoveAsync(int Id)
     {
         try
         {
@@ -67,18 +68,20 @@ public class ActorService
             if (actor != null)
                 context.Remove(actor);
             await context.SaveChangesAsync();
-          
+          return Id;
         }
         catch { throw new InvalidOperationException("cannot delete actor"); }
 
     }
 
-    public async Task EditAsync(Actor actor)
+    public async Task<int> EditAsync(Actor actor)
     {
         try
         {
             context.Update(actor);
             await context.SaveChangesAsync();
+
+            return actor.Id;
         }
         catch { throw new InvalidOperationException("cannot update Actor"); }
     }
