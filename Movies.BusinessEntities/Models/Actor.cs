@@ -7,6 +7,10 @@ public class Actor
 
     public string Surname { get; set; } = string.Empty;
 
+    public int AgentId { get; set; }
+
+    public Agent? agents { get; set; }
+
     public string FullName
     {
         get { return Name + " " + Surname; }

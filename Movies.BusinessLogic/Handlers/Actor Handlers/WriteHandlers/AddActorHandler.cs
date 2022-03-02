@@ -13,7 +13,8 @@ namespace Movies.BusinessLogic
         }
         public async Task<int> Handle(AddActorCommand request, CancellationToken cancellationToken)
         {
-            return await _actorService.AddAsync(request.Actor);
+            var createdActor = await _actorService.AddAsync(request.Actor);
+            return createdActor;
         }
     }
 }

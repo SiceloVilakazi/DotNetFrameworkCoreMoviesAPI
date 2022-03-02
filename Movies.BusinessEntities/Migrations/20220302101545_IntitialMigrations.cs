@@ -4,24 +4,10 @@
 
 namespace Movies.BusinessEntities.Migrations
 {
-    public partial class InitialMigrations : Migration
+    public partial class IntitialMigrations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "actors",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_actors", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "agents",
                 columns: table => new
@@ -54,25 +40,20 @@ namespace Movies.BusinessEntities.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "actorAgents",
+                name: "actors",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AgentId = table.Column<int>(type: "int", nullable: false),
-                    ActorId = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AgentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_actorAgents", x => x.Id);
+                    table.PrimaryKey("PK_actors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_actorAgents_actors_ActorId",
-                        column: x => x.ActorId,
-                        principalTable: "actors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_actorAgents_agents_AgentId",
+                        name: "FK_actors_agents_AgentId",
                         column: x => x.AgentId,
                         principalTable: "agents",
                         principalColumn: "Id",
@@ -106,13 +87,8 @@ namespace Movies.BusinessEntities.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_actorAgents_ActorId",
-                table: "actorAgents",
-                column: "ActorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_actorAgents_AgentId",
-                table: "actorAgents",
+                name: "IX_actors_AgentId",
+                table: "actors",
                 column: "AgentId");
 
             migrationBuilder.CreateIndex(
@@ -129,19 +105,16 @@ namespace Movies.BusinessEntities.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "actorAgents");
-
-            migrationBuilder.DropTable(
                 name: "movieActors");
-
-            migrationBuilder.DropTable(
-                name: "agents");
 
             migrationBuilder.DropTable(
                 name: "actors");
 
             migrationBuilder.DropTable(
                 name: "movies");
+
+            migrationBuilder.DropTable(
+                name: "agents");
         }
     }
 }

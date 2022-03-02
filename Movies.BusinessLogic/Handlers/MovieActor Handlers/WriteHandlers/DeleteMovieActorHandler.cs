@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Movies.BusinessLogic
 {
-    public class DeleteMovieActorHandler : IRequestHandler<DeleteActorAgentCommand, int>
+    public class DeleteMovieActorHandler : IRequestHandler<DeleteMovieActorCommand, int>
     {
         private readonly MovieActorService _movieActorService;
 
@@ -12,9 +12,9 @@ namespace Movies.BusinessLogic
         {
             _movieActorService = movieActorService;
         }
-        public async Task<int> Handle(DeleteActorAgentCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(DeleteMovieActorCommand request, CancellationToken cancellationToken)
         {
-            return await _movieActorService.RemoveAsync(request.ActorAgentId);
+            return await _movieActorService.RemoveAsync(request.MovieActorId);
         }
     }
 }

@@ -11,47 +11,12 @@ builder.Services.AddScoped<MovieService>();
 builder.Services.AddScoped<MovieActorService>();
 builder.Services.AddScoped<ActorService>();
 builder.Services.AddScoped<AgentService>();
-builder.Services.AddScoped<ActorAgentService>();
 #region Movie Handlers
 builder.Services.AddMediatR(typeof(GetMovieListHandler).Assembly);
-builder.Services.AddMediatR(typeof(DeleteMovieHandler).Assembly);
-builder.Services.AddMediatR(typeof(EditMovieHandler).Assembly);
-builder.Services.AddMediatR(typeof(AddMovieHandler).Assembly);
-builder.Services.AddMediatR(typeof(GetMovieByIdHandler).Assembly);
-#endregion
-#region Actor Handlers
-builder.Services.AddMediatR(typeof(GetActorListHandler).Assembly);
-builder.Services.AddMediatR(typeof(DeleteActorHandler).Assembly);
-builder.Services.AddMediatR(typeof(EditActorHandler).Assembly);
-builder.Services.AddMediatR(typeof(AddActorHandler).Assembly);
-builder.Services.AddMediatR(typeof(GetActorByIdHandler).Assembly);
-builder.Services.AddMediatR(typeof(GetActorNamesByMovieHandler).Assembly);
-builder.Services.AddMediatR(typeof(GetTotalActorsByAgentHandler).Assembly);
 #endregion
 
-#region Agent Handlers
-builder.Services.AddMediatR(typeof(GetAgentListHandler).Assembly);
-builder.Services.AddMediatR(typeof(DeleteAgentHandler).Assembly);
-builder.Services.AddMediatR(typeof(EditAgentHandler).Assembly);
-builder.Services.AddMediatR(typeof(AddAgentHandler).Assembly);
-builder.Services.AddMediatR(typeof(GetAgentByIdHandler).Assembly);
-#endregion
 
-#region ActorAgent Handlers 
-builder.Services.AddMediatR(typeof(GetActorAgentsListHandler).Assembly);
-builder.Services.AddMediatR(typeof(DeleteActorAgentHandler).Assembly);
-builder.Services.AddMediatR(typeof(EditActorAgentHandler).Assembly);
-builder.Services.AddMediatR(typeof(AddActorAgentHandler).Assembly);
-builder.Services.AddMediatR(typeof(GetActorAgentByIdHandler).Assembly);
-#endregion
 
-#region MovieActor Handlers
-builder.Services.AddMediatR(typeof(GetMovieActorHandler).Assembly);
-builder.Services.AddMediatR(typeof(DeleteMovieActorHandler).Assembly);
-builder.Services.AddMediatR(typeof(EditMovieActorHandler).Assembly);
-builder.Services.AddMediatR(typeof(AddMovieActorHandler).Assembly);
-builder.Services.AddMediatR(typeof(GetMovieActorByIdHandler).Assembly);
-#endregion
 
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 

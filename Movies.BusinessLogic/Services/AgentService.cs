@@ -6,12 +6,10 @@ namespace Movies.BusinessLogic;
 public class AgentService
 {
     private readonly DataContext context;
-    private readonly ActorAgentService _actorAgentService;
 
-    public AgentService(DataContext dataContext,ActorAgentService actorAgentService)
+    public AgentService(DataContext dataContext)
     {
         context = dataContext;
-        _actorAgentService = actorAgentService;
     }
 
     #region Read Methods
@@ -46,7 +44,6 @@ public class AgentService
     {
         try
         {
-            _actorAgentService.RemoveByAgentId(Id);
             var agent = await context.agents.FirstOrDefaultAsync(x => x.Id == Id);
             if (agent != null)
                 context.Remove(agent);

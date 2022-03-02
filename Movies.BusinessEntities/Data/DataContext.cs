@@ -15,8 +15,6 @@ public class DataContext : DbContext
 
     public DbSet<Actor> actors { get; set; }
 
-    public DbSet<ActorAgent> actorAgents { get; set; }
-
     public DbSet<Agent> agents { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)

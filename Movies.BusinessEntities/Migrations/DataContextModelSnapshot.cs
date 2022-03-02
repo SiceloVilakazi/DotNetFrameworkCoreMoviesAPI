@@ -29,6 +29,9 @@ namespace Movies.BusinessEntities.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("AgentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -39,30 +42,9 @@ namespace Movies.BusinessEntities.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("actors");
-                });
-
-            modelBuilder.Entity("Movies.BusinessEntities.ActorAgent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ActorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AgentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActorId");
-
                     b.HasIndex("AgentId");
 
-                    b.ToTable("actorAgents");
+                    b.ToTable("actors");
                 });
 
             modelBuilder.Entity("Movies.BusinessEntities.Agent", b =>
@@ -141,21 +123,13 @@ namespace Movies.BusinessEntities.Migrations
                     b.ToTable("movieActors");
                 });
 
-            modelBuilder.Entity("Movies.BusinessEntities.ActorAgent", b =>
+            modelBuilder.Entity("Movies.BusinessEntities.Actor", b =>
                 {
-                    b.HasOne("Movies.BusinessEntities.Actor", "actors")
-                        .WithMany("actorAgents")
-                        .HasForeignKey("ActorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Movies.BusinessEntities.Agent", "agents")
-                        .WithMany("actorAgents")
+                        .WithMany()
                         .HasForeignKey("AgentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("actors");
 
                     b.Navigation("agents");
                 });
@@ -177,16 +151,6 @@ namespace Movies.BusinessEntities.Migrations
                     b.Navigation("Actor");
 
                     b.Navigation("Movie");
-                });
-
-            modelBuilder.Entity("Movies.BusinessEntities.Actor", b =>
-                {
-                    b.Navigation("actorAgents");
-                });
-
-            modelBuilder.Entity("Movies.BusinessEntities.Agent", b =>
-                {
-                    b.Navigation("actorAgents");
                 });
 #pragma warning restore 612, 618
         }

@@ -55,7 +55,7 @@ namespace MoviesApp.Controllers
                 var command = new AddActorCommand(model);
                 result = await _medator.Send(command);
             }
-            return StatusCode((int)HttpStatusCode.Created, result);
+            return StatusCode((int)HttpStatusCode.Created);
         }
 
         [HttpPut("Edit")]
