@@ -74,10 +74,10 @@ namespace MoviesApp.Controllers
         [HttpDelete("{Id}")]
         public async Task<ActionResult> Delete(int Id)
         {
-            var command = new DeleteMovieCommand(Id);
+            var command = new DeleteActorCommand(Id);
             var result = await _medator.Send(command);
 
-            return Ok("Movie " + result + ", deleted");
+            return Ok("Actor " + result + ",has been deleted");
         }
     }
 }

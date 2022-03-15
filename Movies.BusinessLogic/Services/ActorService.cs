@@ -1,5 +1,5 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Transactions;
 
 namespace Movies.BusinessLogic;
 
@@ -30,24 +30,24 @@ public class ActorService
 
     public async Task<List<Actor>> GetActorsByMovie(string MovieName)
     {
-        var search = MovieName.ToLower();
+        var search = MovieName.Trim().ToLower();
 
         var actors = await (from actor in context.actors
                             join actorMovie in context.movieActors on actor.Id equals actorMovie.ActorId
                             join movie in context.movies on actorMovie.MovieId equals movie.Id
-                            where movie.Title.ToLower().Contains(search)
+                            where movie.Title.Trim().ToLower().Contains(search)
                             select actor).ToListAsync();
         return actors;
     }
 
     public async Task<int> GetTotalActorsByAgent(string AgentName)
     {
-        var search = AgentName.ToLower();
+        var search = AgentName.Trim().ToLower();
 
         var actors = await (from actor in context.actors
                             join agent in context.agents on actor.AgentId equals agent.Id
-                            where agent.Name.ToLower().Contains(search) ||
-                            agent.CompanyName.ToLower().Contains(search)
+                            where agent.Name.ToLower().Trim().Contains(search) ||
+                            agent.CompanyName.ToLower().Trim().Contains(search)
                             select actor).ToListAsync();
         return actors.Count;
     }
@@ -63,24 +63,31 @@ public class ActorService
             await context.SaveChangesAsync();
             return actor.Id;
         }
-        catch
+        catch (Exception e)
         {
-            throw new InvalidOperationException("cannot add actor");
+            throw new Exception(e.Message);
         }
     }
     public async Task<int> RemoveAsync(int Id)
     {
         try
         {
-            _movieActorService.RemoveByActorId(Id);
-            var actor = await context.actors.FirstOrDefaultAsync(x => x.Id == Id);
-            if (actor != null)
-                context.Remove(actor);
-            await context.SaveChangesAsync();
-            return Id;
-        }
-        catch { throw new InvalidOperationException("cannot delete actor"); }
+            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                _movieActorService.RemoveByActorId(Id);
+                var actor = await context.actors.FirstOrDefaultAsync(x => x.Id == Id);
+                if (actor != null)
+                    context.Remove(actor);
+                await context.SaveChangesAsync();
 
+                scope.Complete();
+            }
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+        return Id;
     }
 
     public async Task<int> EditAsync(Actor actor)
@@ -92,7 +99,10 @@ public class ActorService
 
             return actor.Id;
         }
-        catch { throw new InvalidOperationException("cannot update Actor"); }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
     #endregion 
 }
