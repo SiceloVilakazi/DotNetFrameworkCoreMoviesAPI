@@ -3,6 +3,7 @@ global using Movies.BusinessEntities;
 global using Movies.BusinessLogic;
 global using MediatR;
 using System.Reflection;
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,14 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
 var app = builder.Build();
+
+app.UseCors(policy =>
+    policy.WithOrigins("https://localhost:7043", "https://localhost:7039")
+    .AllowAnyMethod()
+    .WithHeaders(HeaderNames.ContentType));
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

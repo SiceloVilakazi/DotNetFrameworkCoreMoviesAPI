@@ -59,6 +59,7 @@ public class ActorService
     {
         try
         {
+            actor.agents = null;
             context.Add(actor);
             await context.SaveChangesAsync();
             return actor.Id;

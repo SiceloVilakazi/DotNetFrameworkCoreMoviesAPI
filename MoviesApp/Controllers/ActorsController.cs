@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Net.Mime;
 
 namespace MoviesApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
     public class ActorsController : ControllerBase
     {
         private readonly IMediator _medator;
@@ -55,7 +58,7 @@ namespace MoviesApp.Controllers
                 var command = new AddActorCommand(model);
                 result = await _medator.Send(command);
             }
-            return StatusCode((int)HttpStatusCode.Created);
+            return Ok();
         }
 
         [HttpPut("Edit")]
