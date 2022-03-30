@@ -17,6 +17,8 @@ public class DataContext : DbContext
 
     public DbSet<Agent> agents { get; set; }
 
+    public DbSet<Users> users { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
         if (!options.IsConfigured)
