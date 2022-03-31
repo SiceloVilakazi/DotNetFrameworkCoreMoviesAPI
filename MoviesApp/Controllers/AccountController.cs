@@ -16,31 +16,19 @@ namespace MoviesApp.Controllers
             this.jwtSettings = jWTSettings;
             _medator = mediator;
         }
-        private IEnumerable<Users> logins = new List<Users>() {
-            new Users() {
-                    Id = Guid.NewGuid(),
-                        EmailId = "adminakp@gmail.com",
-                        UserName = "Admin",
-                        Password = "Admin",
-                },
-                new Users() {
-                    Id = Guid.NewGuid(),
-                        EmailId = "adminakp@gmail.com",
-                        UserName = "User1",
-                        Password = "Admin",
-                }
-        };
+       
         [HttpPost]
         public async  Task<IActionResult> GetToken(UserLogins userLogins)
         {
             try
             {
                 var Token = new UserTokens();
-                //var Valid = logins.Any(x => x.UserName.Equals(userLogins.UserName, StringComparison.OrdinalIgnoreCase));
-                var query = new GetUserByUserNameQuery(userLogins.UserName);
-                //var isValid = _medator.Send(query);
-                //if (isValid)
-                //{
+                var validityQuery = new GetUserAvailabilityQuery(userLogins.UserName, userLogins.Password);
+                var Valid = await _medator.Send(validityQuery);
+               
+                if (Valid)
+                {
+                    var query = new GetUserByUserNameQuery(userLogins.UserName);
                     var user = await _medator.Send(query);
                     Token = JwtHelpers.GenTokenkey(new UserTokens()
                     {
@@ -49,11 +37,11 @@ namespace MoviesApp.Controllers
                         UserName = user.UserName,
                         Id = user.Id,
                     }, jwtSettings);
-                //}
-                //else
-                //{
-                //    return BadRequest($"wrong password");
-               // }
+                }
+                else
+                {
+                    return BadRequest($"wrong password");
+                }
                 return Ok(Token);
             }
             catch (Exception ex)

@@ -20,5 +20,19 @@ namespace Movies.BusinessLogic
             return user;
         }
 
+        public async Task<bool> UserAvailable(string Username,string Password)
+        {
+            var username = Username.Trim().ToLower();
+            var password = Password.Trim().ToLower();
+
+            var user = await _context.users.AnyAsync(x=>x.UserName.Trim().ToLower().
+            Equals(username) || x.Password.Trim().ToLower().Equals(password));
+
+            if(user)
+              return true;
+
+            return false;
+        }
+
     }
 }
