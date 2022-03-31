@@ -49,6 +49,12 @@ namespace MoviesApp.Controllers
                 throw;
             }
         }
-
+        [HttpPost]
+        public async Task<IActionResult> AddUser(Users user)
+        {
+            var command = new AddUserCommand(user);
+            await _medator.Send(command);
+            return Ok();
+        }
     }
 }
