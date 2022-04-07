@@ -12,8 +12,8 @@ using Movies.BusinessEntities;
 namespace Movies.BusinessEntities.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220330130323_InitialMigrations")]
-    partial class InitialMigrations
+    [Migration("20220407100143_initialmigration")]
+    partial class initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,6 +42,9 @@ namespace Movies.BusinessEntities.Migrations
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

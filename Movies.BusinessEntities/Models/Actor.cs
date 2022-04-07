@@ -27,5 +27,7 @@ public class Actor
         get { return Name + " " + Surname; }
     }
 
+    public bool isDeleted { get; set; } = false;
+
 }
 
